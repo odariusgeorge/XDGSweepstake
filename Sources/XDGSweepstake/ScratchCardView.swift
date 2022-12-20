@@ -78,10 +78,6 @@ public struct ScratchCardView<Content: View, OverlayView: View>: View {
                                 withAnimation {
                                     if shouldUnveilContent() {
                                         onFinish = true
-                                    } else {
-                                        withAnimation(.easeIn) {
-                                            points.removeAll()
-                                        }
                                     }
                                 }
                             }
