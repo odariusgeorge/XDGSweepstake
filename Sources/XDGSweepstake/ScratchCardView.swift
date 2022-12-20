@@ -76,7 +76,13 @@ public struct ScratchCardView<Content: View, OverlayView: View>: View {
                         .onEnded(
                             { value in
                                 withAnimation {
-                                    onFinish = true
+                                    if shouldUnveilContent() {
+                                        onFinish = true
+                                    } else {
+                                        withAnimation(.easeIn) {
+                                            points.removeAll()
+                                        }
+                                    }
                                 }
                             }
                         )
@@ -95,5 +101,22 @@ public struct ScratchCardView<Content: View, OverlayView: View>: View {
                 }
             }
         )
+    }
+}
+
+// MARK: - Private
+
+private extension ScratchCardView {
+
+    func maskSize() -> CGSize {
+        Path { path in path.addLines(points) }.boundingRect.size
+    }
+
+    func getArea(size: CGSize) -> CGFloat {
+        size.height * size.width
+    }
+
+    func shouldUnveilContent() -> Bool {
+        getArea(size: maskSize()) >= (getArea(size: size) / 2)
     }
 }
